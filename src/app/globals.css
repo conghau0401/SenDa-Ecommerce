@@ -1,26 +1,175 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+ * Design tokens – đổi màu thương hiệu tại đây
+ * ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Thang màu xanh lá thương hiệu */
+  --leaf-50: #f1f8f3;
+  --leaf-100: #ddefe3;
+  --leaf-200: #c2e3cd;
+  --leaf-300: #a8d5ba; /* mint nhấn */
+  --leaf-400: #74b98c;
+  --leaf-500: #4f9d69; /* màu chính */
+  --leaf-600: #3e8455;
+  --leaf-700: #2f6b3a; /* xanh đậm */
+  --leaf-800: #255530;
+  --leaf-900: #1b3f24;
+
+  /* Màu ngữ nghĩa */
+  --background: #fbf9f4; /* kem nhạt */
+  --surface: #ffffff;
+  --sand: #f3efe6;
+  --foreground: #1f2a22;
+  --muted: #5f6b62; /* chữ phụ – contrast ≥ 4.5:1 trên nền kem */
+  --border: #e6e2d8;
+  --primary: var(--leaf-700); /* nút chính: chữ trắng trên #2F6B3A đạt AA */
+  --primary-hover: var(--leaf-800);
+  --primary-foreground: #ffffff;
+  --accent: var(--leaf-300);
+  --danger: #c2410c;
+  --warning: #b45309;
+  --sale: #d9480f;
+
+  --radius: 1rem;
+  --shadow-soft: 0 1px 2px rgb(31 42 34 / 0.04), 0 4px 16px rgb(31 42 34 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(31 42 34 / 0.05), 0 12px 32px rgb(31 42 34 / 0.1);
 }
 
 @theme inline {
+  --color-leaf-50: var(--leaf-50);
+  --color-leaf-100: var(--leaf-100);
+  --color-leaf-200: var(--leaf-200);
+  --color-leaf-300: var(--leaf-300);
+  --color-leaf-400: var(--leaf-400);
+  --color-leaf-500: var(--leaf-500);
+  --color-leaf-600: var(--leaf-600);
+  --color-leaf-700: var(--leaf-700);
+  --color-leaf-800: var(--leaf-800);
+  --color-leaf-900: var(--leaf-900);
+
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-sand: var(--sand);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-sale: var(--sale);
+
+  --font-sans: var(--font-be-vietnam), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: var(--radius);
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  --animate-cart-bump: cart-bump 0.45s ease-out;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes cart-bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.25);
+  }
+  60% {
+    transform: scale(0.92);
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  /* Focus state rõ ràng cho bàn phím */
+  :focus-visible {
+    outline: 2px solid var(--leaf-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--leaf-200);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--sand) 0px, #ece7db 120px, var(--sand) 240px);
+    background-size: 800px 100%;
+    @apply animate-shimmer rounded-lg;
+  }
+
+  /* Nội dung rich text (mô tả sản phẩm, bài viết) */
+  .prose-content {
+    @apply text-[15px] leading-7 text-foreground/90 sm:text-base;
+  }
+  .prose-content > * + * {
+    @apply mt-4;
+  }
+  .prose-content h2 {
+    @apply mt-8 text-xl font-semibold text-leaf-800 sm:text-2xl;
+  }
+  .prose-content h3 {
+    @apply mt-6 text-lg font-semibold text-leaf-800;
+  }
+  .prose-content a {
+    @apply font-medium text-leaf-700 underline underline-offset-2 hover:text-leaf-800;
+  }
+  .prose-content ul {
+    @apply list-disc space-y-1.5 pl-6 marker:text-leaf-500;
+  }
+  .prose-content ol {
+    @apply list-decimal space-y-1.5 pl-6 marker:text-leaf-600;
+  }
+  .prose-content blockquote {
+    @apply rounded-r-xl border-l-4 border-leaf-400 bg-leaf-50 px-5 py-3 text-leaf-900 italic;
+  }
+  .prose-content img {
+    @apply my-6 h-auto max-w-full rounded-2xl;
+  }
+  .prose-content strong {
+    @apply font-semibold text-foreground;
+  }
 }

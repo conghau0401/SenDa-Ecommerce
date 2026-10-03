@@ -1,0 +1,144 @@
+// Prisma schema – Sen Đá Shop
+// Dev dùng SQLite. Muốn chuyển PostgreSQL: đổi provider = "postgresql" và DATABASE_URL.
+// Các trạng thái được lưu dạng String (validate bằng zod ở src/lib/constants.ts) để dễ di chuyển giữa các DB.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([isActive, sortOrder])
+}
+
+model Product {
+  id              Int            @id @default(autoincrement())
+  name            String
+  slug            String         @unique
+  sku             String?
+  price           Int // VNĐ
+  salePrice       Int? // VNĐ, null = không khuyến mãi
+  stock           Int            @default(0)
+  shortDesc       String?
+  description     String         @default("") // HTML (đã sanitize khi render)
+  careGuide       String         @default("") // HTML
+  categoryId      Int?
+  category        Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  images          ProductImage[]
+  orderItems      OrderItem[]
+  isActive        Boolean        @default(true)
+  showOnHome      Boolean        @default(false)
+  isFeatured      Boolean        @default(false)
+  isNew           Boolean        @default(false)
+  sortOrder       Int            @default(0)
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([categoryId, isActive])
+  @@index([isActive, showOnHome])
+  @@index([createdAt])
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+
+  @@index([productId, sortOrder])
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  code          String      @unique
+  customerName  String
+  phone         String
+  address       String
+  note          String?
+  paymentMethod String      @default("COD") // COD | BANK_TRANSFER
+  status        String      @default("NEW") // NEW | CONFIRMED | SHIPPING | COMPLETED | CANCELLED
+  subtotal      Int
+  shippingFee   Int
+  total         Int
+  internalNote  String?
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([phone])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id           Int      @id @default(autoincrement())
+  orderId      Int
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    Int?
+  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName  String // snapshot tại thời điểm đặt
+  productImage String?
+  price        Int // đơn giá thực tế tại thời điểm đặt
+  quantity     Int
+}
+
+model Post {
+  id              Int       @id @default(autoincrement())
+  title           String
+  slug            String    @unique
+  excerpt         String?
+  content         String    @default("") // HTML
+  coverImage      String?
+  status          String    @default("DRAFT") // DRAFT | PUBLISHED
+  publishedAt     DateTime?
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  contact   String // SĐT hoặc email
+  message   String
+  isHandled Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isHandled, createdAt])
+}
+
+// Key-value, value là JSON string. Xem src/lib/settings.ts
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
