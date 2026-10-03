@@ -9,6 +9,7 @@ import { changePassword } from "@/actions/auth";
 import { vietQrUrl, type Banner, type Settings, type SettingKey } from "@/lib/settings-schema";
 import { formatVND } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { randomUUID } from "@/lib/uuid";
 import { Button } from "../ui/button";
 import { FormField, fieldAria, inputClass } from "../ui/form-field";
 import { Card } from "./ui";
@@ -268,7 +269,7 @@ function BannersSection({ initial }: { initial: Settings["home"] }) {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setBanners((l) => [...l, { _k: crypto.randomUUID(), image: "", title: "", subtitle: "", ctaText: "", ctaLink: "" }])}
+              onClick={() => setBanners((l) => [...l, { _k: randomUUID(), image: "", title: "", subtitle: "", ctaText: "", ctaLink: "" }])}
             >
               <Plus className="size-4" aria-hidden /> Thêm banner
             </Button>

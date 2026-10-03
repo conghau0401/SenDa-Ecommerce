@@ -12,6 +12,7 @@ import { QUICK_REPLIES } from "@/lib/chatbot/knowledge";
 import { effectivePrice, formatVND } from "@/lib/format";
 import { useUi } from "@/store/ui";
 import { cn } from "@/lib/utils";
+import { randomUUID } from "@/lib/uuid";
 import { useAddToCart } from "../cart/use-add-to-cart";
 import { Mascot } from "./mascot";
 import { ChatRichText } from "./rich-text";
@@ -23,7 +24,7 @@ const MAX_LEN = 500;
 function getSessionId(): string {
   let id = localStorage.getItem(SESSION_KEY);
   if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
-    id = crypto.randomUUID();
+    id = randomUUID();
     localStorage.setItem(SESSION_KEY, id);
   }
   return id;
@@ -198,7 +199,7 @@ export function ChatWidget({ storeName }: { storeName: string }) {
   };
 
   const newConversation = () => {
-    sessionRef.current = crypto.randomUUID();
+    sessionRef.current = randomUUID();
     localStorage.setItem(SESSION_KEY, sessionRef.current);
     setMessages([]);
     setError(null);

@@ -16,6 +16,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { randomUUID } from "@/lib/uuid";
 import { uploadImages } from "./upload";
 
 export type ManagedImage = { id: string; url: string; alt: string };
@@ -94,7 +95,7 @@ export function ImagesManager({ images, onChange }: { images: ManagedImage[]; on
     setUploading(true);
     try {
       const uploaded = await uploadImages(files.slice(0, 10));
-      onChange([...images, ...uploaded.map((u) => ({ id: crypto.randomUUID(), url: u.url, alt: "" }))]);
+      onChange([...images, ...uploaded.map((u) => ({ id: randomUUID(), url: u.url, alt: "" }))]);
       toast.success(`Đã tải lên ${uploaded.length} ảnh`);
     } catch (err) {
       toast.error((err as Error).message);
