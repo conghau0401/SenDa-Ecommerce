@@ -29,8 +29,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi" className={beVietnam.variable}>
-      <body className="min-h-dvh font-sans antialiased">{children}</body>
+    // suppressHydrationWarning: extension trình duyệt (ColorZilla, Grammarly...) hay chèn thuộc tính vào <html>/<body>.
+    // Chỉ áp dụng cho thuộc tính của chính 2 thẻ này, không che lỗi hydration bên trong.
+    <html lang="vi" className={beVietnam.variable} suppressHydrationWarning>
+      <body className="min-h-dvh font-sans antialiased" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
