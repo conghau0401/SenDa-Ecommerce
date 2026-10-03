@@ -11,6 +11,7 @@ import path from "node:path";
 import { slugify } from "../src/lib/slug";
 import { generateOrderCode } from "../src/lib/order-code";
 import { productDerivedFields } from "../src/lib/product-utils";
+import { CHAT_FAQS } from "./seed-data/chat-faqs";
 import type { Settings } from "../src/lib/settings-schema";
 
 const prisma = new PrismaClient();
@@ -264,6 +265,9 @@ async function main() {
   await prepareImages();
 
   // Xóa dữ liệu cũ (theo thứ tự phụ thuộc)
+  await prisma.chatMessage.deleteMany();
+  await prisma.chatConversation.deleteMany();
+  await prisma.chatFaq.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
   await prisma.productImage.deleteMany();
@@ -482,6 +486,67 @@ async function main() {
     ],
   });
   console.log("  ✓ 3 liên hệ mẫu");
+
+  // Chatbot: kiến thức hỏi – đáp
+  await prisma.chatFaq.createMany({
+    data: CHAT_FAQS.map((f, i) => ({ ...f, keywords: f.keywords.join(", "), sortOrder: i })),
+  });
+  console.log(`  ✓ ${CHAT_FAQS.length} câu hỏi – đáp cho chatbot`);
+
+  // Chatbot: vài hội thoại mẫu để xem thử trong admin
+  const sampleChats: { minutesAgo: number; reviewed: boolean; msgs: [string, string, string?, boolean?][] }[] = [
+    {
+      minutesAgo: 35,
+      reviewed: true,
+      msgs: [
+        ["user", "phí ship bao nhiêu vậy shop"],
+        ["bot", "Phí giao hàng đồng giá **30.000đ**/đơn.\n🎉 **Miễn phí ship** cho đơn từ **500.000đ**.", "shipping_fee"],
+        ["user", "bao lâu thì nhận được hàng"],
+        ["bot", CHAT_FAQS[0].answer, "faq"],
+      ],
+    },
+    {
+      minutesAgo: 120,
+      reviewed: true,
+      msgs: [
+        ["user", "tư vấn cây dễ chăm để bàn làm việc dưới 100k"],
+        ["bot", "Với tiêu chí **dễ chăm, hợp người mới, chịu bóng, để trong nhà / văn phòng, dưới 100.000đ**, Bé Sen gợi ý:", "recommend"],
+      ],
+    },
+    {
+      minutesAgo: 300,
+      reviewed: false,
+      msgs: [
+        ["user", "shop có bán hạt giống sen đá không"],
+        ["bot", "Xin lỗi, Bé Sen chưa hiểu ý bạn lắm 🥺 Bạn có thể hỏi về **phí ship, thời gian giao hàng, tư vấn chọn cây, quà tặng, tình trạng đơn hàng**... hoặc chọn nhanh bên dưới nhé!", "fallback", false],
+      ],
+    },
+  ];
+  for (const chat of sampleChats) {
+    const at = new Date(now - chat.minutesAgo * 60_000);
+    await prisma.chatConversation.create({
+      data: {
+        sessionId: crypto.randomUUID(),
+        messageCount: chat.msgs.length,
+        unansweredCount: chat.msgs.filter((m) => m[3] === false).length,
+        isReviewed: chat.reviewed,
+        pagePath: "/",
+        createdAt: at,
+        lastMessageAt: at,
+        messages: {
+          create: chat.msgs.map(([role, content, intent, answered], i) => ({
+            role,
+            content,
+            intent: role === "bot" ? (intent ?? null) : null,
+            source: role === "bot" ? (intent === "faq" ? "faq" : "rule") : null,
+            answered: answered ?? true,
+            createdAt: new Date(at.getTime() + i * 20_000),
+          })),
+        },
+      },
+    });
+  }
+  console.log(`  ✓ ${sampleChats.length} hội thoại chatbot mẫu`);
 
   console.log("✅ Seed hoàn tất!");
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ShoppingBag, Zap } from "lucide-react";
 import type { CartItem } from "@/store/cart";
+import { useUi } from "@/store/ui";
 import { useAddToCart } from "../cart/use-add-to-cart";
 import { Button } from "../ui/button";
 import { Price } from "../ui/price";
@@ -33,6 +34,13 @@ export function ProductPurchase({ product, price, salePrice }: Props) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  // Báo cho nút chat biết để nhích lên tránh thanh sticky
+  const setStickyBarVisible = useUi((s) => s.setStickyBarVisible);
+  useEffect(() => {
+    setStickyBarVisible(!actionsVisible && !outOfStock);
+    return () => setStickyBarVisible(false);
+  }, [actionsVisible, outOfStock, setStickyBarVisible]);
 
   const flySource = () => document.querySelector<HTMLElement>("[data-fly-image]");
 

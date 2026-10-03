@@ -145,3 +145,55 @@ model AdminUser {
   passwordHash String
   createdAt    DateTime @default(now())
 }
+
+// ------------------------------------------------------------------
+// Chatbot
+// ------------------------------------------------------------------
+
+model ChatConversation {
+  id              Int           @id @default(autoincrement())
+  sessionId       String        @unique // UUID lưu ở localStorage của khách
+  context         String        @default("{}") // JSON: trạng thái hội thoại (đang chờ mã đơn/SĐT...)
+  messageCount    Int           @default(0)
+  unansweredCount Int           @default(0) // số câu bot chưa hiểu
+  isReviewed      Boolean       @default(true) // false khi có câu chưa trả lời mà admin chưa xem
+  pagePath        String? // trang khách mở chat lần đầu
+  lastMessageAt   DateTime      @default(now())
+  createdAt       DateTime      @default(now())
+  messages        ChatMessage[]
+
+  @@index([lastMessageAt])
+  @@index([isReviewed])
+}
+
+model ChatMessage {
+  id             Int              @id @default(autoincrement())
+  conversationId Int
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String // user | bot
+  content        String
+  intent         String? // ý định nhận diện được (bot)
+  source         String? // rule | faq | ai (bot)
+  answered       Boolean          @default(true) // false = bot không hiểu câu hỏi
+  payload        String? // JSON: sản phẩm gợi ý, nút trả lời nhanh, liên kết
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId, createdAt])
+  @@index([intent])
+}
+
+// Kiến thức hỏi – đáp, admin chỉnh sửa được
+model ChatFaq {
+  id        Int      @id @default(autoincrement())
+  question  String // câu hỏi mẫu (hiển thị)
+  keywords  String // cụm từ khóa, phân tách bằng dấu phẩy
+  answer    String // hỗ trợ **đậm**, [liên kết](/duong-dan), xuống dòng, "- " gạch đầu dòng
+  category  String   @default("chung")
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  hitCount  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+}

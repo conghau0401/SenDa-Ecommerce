@@ -8,14 +8,15 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   const admin = await requireAdmin();
-  const [{ store }, newOrders, openContacts] = await Promise.all([
+  const [{ store }, newOrders, openContacts, chatToReview] = await Promise.all([
     getSettings(),
     prisma.order.count({ where: { status: "NEW" } }),
     prisma.contact.count({ where: { isHandled: false } }),
+    prisma.chatConversation.count({ where: { isReviewed: false } }),
   ]);
 
   return (
-    <AdminShell storeName={store.name} admin={admin} badges={{ orders: newOrders, contacts: openContacts }}>
+    <AdminShell storeName={store.name} admin={admin} badges={{ orders: newOrders, contacts: openContacts, chatbot: chatToReview }}>
       {children}
     </AdminShell>
   );

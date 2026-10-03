@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import {
+  Bot,
   ExternalLink,
   FileText,
   FolderTree,
@@ -28,13 +29,14 @@ const NAV = [
   { href: "/admin/danh-muc", label: "Danh mục", Icon: FolderTree },
   { href: "/admin/tin-tuc", label: "Tin tức", Icon: FileText },
   { href: "/admin/lien-he", label: "Liên hệ", Icon: Mail, badge: "contacts" as const },
+  { href: "/admin/chatbot", label: "Chatbot", Icon: Bot, badge: "chatbot" as const },
   { href: "/admin/cai-dat", label: "Cài đặt", Icon: Settings },
 ];
 
 type Props = {
   storeName: string;
   admin: { name: string; email: string };
-  badges: { orders: number; contacts: number };
+  badges: { orders: number; contacts: number; chatbot: number };
   children: React.ReactNode;
 };
 

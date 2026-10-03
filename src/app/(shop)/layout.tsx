@@ -3,9 +3,10 @@ import { getSettings } from "@/lib/settings";
 import { SiteHeader } from "@/components/shop/site-header";
 import { SiteFooter } from "@/components/shop/site-footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
-  const { shipping } = await getSettings();
+  const { shipping, store } = await getSettings();
   return (
     <>
       <SiteHeader />
@@ -14,6 +15,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
       </main>
       <SiteFooter />
       <CartDrawer shipping={shipping} />
+      <ChatWidget storeName={store.name} />
       <Toaster
         position="top-center"
         richColors
