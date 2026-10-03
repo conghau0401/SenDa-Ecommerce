@@ -10,6 +10,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { slugify } from "../src/lib/slug";
 import { generateOrderCode } from "../src/lib/order-code";
+import { productDerivedFields } from "../src/lib/product-utils";
 import type { Settings } from "../src/lib/settings-schema";
 
 const prisma = new PrismaClient();
@@ -379,6 +380,7 @@ async function main() {
         sku: `SD${String(i + 1).padStart(3, "0")}`,
         price: p.price,
         salePrice: p.sale ?? null,
+        ...productDerivedFields({ name: p.name, sku: `SD${String(i + 1).padStart(3, "0")}`, price: p.price, salePrice: p.sale ?? null }),
         stock: p.stock,
         shortDesc: p.short,
         description,

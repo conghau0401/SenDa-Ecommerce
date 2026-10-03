@@ -31,8 +31,10 @@ model Product {
   name            String
   slug            String         @unique
   sku             String?
+  searchText      String         @default("") // tên + SKU bỏ dấu, chữ thường – phục vụ tìm kiếm
   price           Int // VNĐ
   salePrice       Int? // VNĐ, null = không khuyến mãi
+  finalPrice      Int // = salePrice ?? price. Lưu sẵn để lọc/sắp xếp theo giá thực bán
   stock           Int            @default(0)
   shortDesc       String?
   description     String         @default("") // HTML (đã sanitize khi render)
@@ -54,6 +56,7 @@ model Product {
   @@index([categoryId, isActive])
   @@index([isActive, showOnHome])
   @@index([createdAt])
+  @@index([finalPrice])
 }
 
 model ProductImage {
