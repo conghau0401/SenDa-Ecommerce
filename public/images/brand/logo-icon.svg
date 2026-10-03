@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Logo mặc định "Sen Đá Xinh": ô vuông bo góc màu xanh thương hiệu (#2F6B3A) + biểu tượng lá (lucide "leaf") -->
+  <rect width="36" height="36" rx="12" fill="#2F6B3A"/>
+  <g transform="translate(8 8) scale(0.8333333)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20"/>
+    <path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13"/>
+  </g>
+</svg>
