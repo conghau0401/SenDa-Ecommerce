@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:webpack": "next dev",
+    "dev:warm": "node scripts/dev-warm.mjs",
+    "warmup": "node scripts/warmup.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
