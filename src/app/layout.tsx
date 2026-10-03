@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { getSettings } from "@/lib/settings";
 import { SITE_URL } from "@/lib/site";
+import { NavigationProgress } from "@/components/navigation-progress";
 import "./globals.css";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     // Chỉ áp dụng cho thuộc tính của chính 2 thẻ này, không che lỗi hydration bên trong.
     <html lang="vi" className={beVietnam.variable} suppressHydrationWarning>
       <body className="min-h-dvh font-sans antialiased" suppressHydrationWarning>
+        <NavigationProgress />
         {children}
       </body>
     </html>

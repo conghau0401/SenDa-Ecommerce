@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { formatVND } from "@/lib/format";
 import { PRICE_PRESETS, SORT_KEYS, SORT_LABELS, listingQuery, type ListingParams, type SortParam } from "@/lib/listing-params";
 import { Button } from "../ui/button";
+import { startNavigationProgress } from "../navigation-progress";
 
 type Category = { name: string; slug: string; count: number };
 
@@ -48,6 +49,7 @@ function FilterPanel({
     let a = min ? Number(min) : undefined;
     let b = max ? Number(max) : undefined;
     if (a != null && b != null && a > b) [a, b] = [b, a];
+    startNavigationProgress();
     router.push(priceHref(a, b), { scroll: false });
     onNavigate?.();
   };
@@ -145,13 +147,14 @@ export function SortSelect({ params, basePath }: { params: ListingParams; basePa
       <span className="hidden text-muted sm:inline">Sắp xếp:</span>
       <select
         value={params.sort ?? "noi-bat"}
-        onChange={(e) =>
+        onChange={(e) => {
+          startNavigationProgress();
           startTransition(() =>
             router.push(`${basePath}${listingQuery({ ...params, sort: e.target.value as SortParam, page: undefined })}`, {
               scroll: false,
             }),
-          )
-        }
+          );
+        }}
         className={cn(
           "h-10 cursor-pointer rounded-full border border-border bg-surface pr-8 pl-4 text-sm font-medium outline-none focus:border-leaf-500 focus:ring-2 focus:ring-leaf-200",
           pending && "opacity-60",

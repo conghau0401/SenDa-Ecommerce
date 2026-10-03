@@ -8,6 +8,7 @@ import { ChevronDown, Menu, Phone, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
 import { CartButton } from "../cart/cart-button";
+import { startNavigationProgress } from "../navigation-progress";
 
 type Category = { name: string; slug: string };
 
@@ -36,6 +37,7 @@ function SearchForm({ autoFocus, onDone, className }: { autoFocus?: boolean; onD
       onSubmit={(e) => {
         e.preventDefault();
         const value = q.trim();
+        startNavigationProgress();
         router.push(value ? `/san-pham?q=${encodeURIComponent(value)}` : "/san-pham");
         onDone?.();
       }}

@@ -10,6 +10,7 @@ import { useAddToCart } from "../cart/use-add-to-cart";
 import { Button } from "../ui/button";
 import { Price } from "../ui/price";
 import { QuantityPicker } from "../ui/quantity-picker";
+import { startNavigationProgress } from "../navigation-progress";
 
 type Props = {
   product: Omit<CartItem, "quantity">;
@@ -48,6 +49,7 @@ export function ProductPurchase({ product, price, salePrice }: Props) {
 
   const handleBuyNow = () => {
     addToCart(product, qty, null);
+    startNavigationProgress();
     router.push("/thanh-toan");
   };
 

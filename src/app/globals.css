@@ -239,3 +239,10 @@
   background-image: radial-gradient(circle at 1px 1px, rgb(79 157 105 / 0.12) 1px, transparent 0);
   background-size: 18px 18px;
 }
+
+/* Thanh tiến trình chuyển trang */
+@keyframes nav-progress {
+  0% { width: 0%; }
+  15% { width: 35%; }
+  100% { width: 90%; }
+}
