@@ -242,7 +242,7 @@ export function HeaderClient({
         {menuOpen && (
           <div className="fixed inset-0 z-50 lg:hidden" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
             <motion.div
-              className="absolute inset-0 bg-leaf-900/40 backdrop-blur-[2px]"
+              className="absolute inset-0 cursor-pointer bg-leaf-900/40 backdrop-blur-[2px]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

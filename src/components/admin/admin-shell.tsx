@@ -149,7 +149,7 @@ export function AdminShell({ children, ...props }: Props) {
         {open && (
           <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu quản trị">
             <motion.div
-              className="absolute inset-0 bg-black/40"
+              className="absolute inset-0 cursor-pointer bg-black/40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

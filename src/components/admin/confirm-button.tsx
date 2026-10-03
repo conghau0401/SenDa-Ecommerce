@@ -52,7 +52,7 @@ export function ConfirmButton({
         {open && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
-              className="absolute inset-0 bg-black/40"
+              className="absolute inset-0 cursor-pointer bg-black/40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

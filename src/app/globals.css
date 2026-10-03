@@ -117,6 +117,39 @@
     background: var(--leaf-200);
   }
 
+  /*
+   * Con trỏ bàn tay cho mọi phần tử bấm được.
+   * Tailwind v4 đặt <button> về cursor: default nên phải khai báo lại.
+   * Nằm trong @layer base -> các class tiện ích (cursor-grab, cursor-default...) vẫn ghi đè được.
+   */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"],
+  [role="switch"]:not(:disabled),
+  [role="option"],
+  summary,
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  input[type="file"]:not(:disabled),
+  input[type="color"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="button"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  label:has(> input[type="checkbox"], > input[type="radio"]),
+  input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+
+  /* Phần tử bị vô hiệu hóa: báo không bấm được */
+  button:disabled,
+  select:disabled,
+  input:disabled,
+  textarea:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

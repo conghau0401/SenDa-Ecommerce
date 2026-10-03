@@ -207,7 +207,7 @@ export function ProductFilters(props: { categories: Category[]; params: ListingP
         {open && (
           <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Bộ lọc">
             <motion.div
-              className="absolute inset-0 bg-leaf-900/40"
+              className="absolute inset-0 cursor-pointer bg-leaf-900/40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

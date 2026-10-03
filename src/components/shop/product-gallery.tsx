@@ -35,7 +35,7 @@ export function ProductGallery({ images, name, badges }: { images: GalleryImage[
           <motion.div
             key={index}
             custom={direction}
-            className="absolute inset-0 touch-pan-y"
+            className={cn("absolute inset-0 touch-pan-y", count > 1 && "cursor-grab active:cursor-grabbing")}
             initial={{ opacity: 0, x: direction * 40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: direction * -40 }}
