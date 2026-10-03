@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌱 Sen Đá Xinh – Website bán sen đá
 
-## Getting Started
+**Đồ án môn học** · Trường Đại học Công nghệ Thông tin – ĐHQG TP. Hồ Chí Minh (UIT)
 
-First, run the development server:
+| | |
+|---|---|
+| Sinh viên thực hiện | **Trần Thị Thanh Hương** |
+| Mã số sinh viên | **25210281** |
+| Email | [25210281@ms.uit.edu.vn](mailto:25210281@ms.uit.edu.vn) |
+| Năm thực hiện | 2026 |
+
+Website thương mại điện tử bán sen đá, xương rồng và tiểu cảnh terrarium. Hệ thống gồm trang bán hàng cho khách, trang quản trị cho chủ shop, và chatbot tư vấn "Bé Sen".
+
+---
+
+## Chức năng chính
+
+**Phía khách hàng**
+- Trang chủ: banner, danh mục, sản phẩm nổi bật, sản phẩm mới, bài viết.
+- Danh sách sản phẩm: lọc theo danh mục, khoảng giá, sắp xếp, tìm kiếm (gõ có dấu hoặc không dấu đều được), phân trang.
+- Chi tiết sản phẩm: nhiều ảnh, giá khuyến mãi, tồn kho, hướng dẫn chăm sóc, sản phẩm liên quan.
+- Giỏ hàng dạng ngăn trượt, hiệu ứng ảnh bay vào giỏ; giỏ được lưu trên trình duyệt.
+- Thanh toán 1 bước, không cần tài khoản: COD hoặc chuyển khoản (mã QR VietQR).
+- Tra cứu đơn hàng bằng SĐT + mã đơn; tin tức; liên hệ.
+- **Chatbot "Bé Sen"**: tư vấn chọn cây theo nhu cầu và ngân sách, quà tặng, phí ship, thời gian giao hàng, tình trạng đơn hàng…
+
+**Phía quản trị** (`/admin`)
+- Tổng quan: doanh thu, biểu đồ doanh số 14 ngày, đơn theo trạng thái, sản phẩm sắp hết hàng.
+- Quản lý sản phẩm (nhiều ảnh, kéo thả sắp xếp, soạn thảo rich text, bật/tắt hiển thị ngay trong bảng), danh mục, tin tức, liên hệ.
+- Đơn hàng: lọc theo trạng thái/ngày/SĐT, đổi trạng thái (hủy đơn tự hoàn tồn kho), ghi chú nội bộ, **xuất CSV cho Excel**.
+- Chatbot: lịch sử hội thoại, thống kê, câu hỏi bot chưa hiểu, chỉnh sửa bộ kiến thức.
+- Cài đặt cửa hàng: thông tin liên hệ, logo, mạng xã hội, chuyển khoản, phí ship, banner.
+
+## Công nghệ
+
+Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Prisma ORM + SQLite · Framer Motion · Tiptap · Zod.
+
+---
+
+## Cài đặt & chạy
+
+Yêu cầu: **Node.js 20 trở lên**.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Cài thư viện
+npm install
+
+# 2. Tạo file cấu hình (sau đó có thể sửa SESSION_SECRET trong .env)
+cp .env.example .env            # Windows (cmd): copy .env.example .env
+
+# 3. Tạo cơ sở dữ liệu
+npx prisma migrate deploy
+
+# 4. Nạp dữ liệu mẫu: 8 danh mục, 32 sản phẩm, 6 bài viết, 150 đơn hàng mẫu, 25 câu kiến thức chatbot
+npm run db:seed
+
+# 5. Chạy website
+npm run dev:warm                # chạy và tự mở trước các trang (bấm menu không phải chờ)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mở **http://localhost:3000**. Trang quản trị: **http://localhost:3000/admin**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Tài khoản quản trị mặc định
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Email | Mật khẩu |
+|---|---|
+| `admin@senda.local` | `admin123` |
 
-## Learn More
+Khai báo trong `.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`). Có thể đổi mật khẩu tại **Cài đặt → Tài khoản**.
 
-To learn more about Next.js, take a look at the following resources:
+### Các lệnh thường dùng
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Lệnh | Tác dụng |
+|---|---|
+| `npm run dev:warm` | Chạy website (chế độ phát triển) và tự mở trước mọi trang |
+| `npm run dev` | Chạy website (chế độ phát triển) |
+| `npm run build` rồi `npm start` | Chạy bản tối ưu (nhanh như khi triển khai thật) |
+| `npm run db:seed` | **Xóa và tạo lại toàn bộ** dữ liệu mẫu |
+| `npm run db:demo-orders` | Chỉ tạo lại **đơn hàng mẫu** (giữ nguyên sản phẩm, cài đặt) và xuất thống kê ra `docs/bao-cao-du-lieu-mua-hang.md` |
+| `npm run db:studio` | Xem/sửa cơ sở dữ liệu bằng giao diện |
+| `npm run chatbot:test` | Kiểm thử chatbot với 46 câu hỏi mẫu |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Dữ liệu mẫu cho báo cáo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **150 đơn hàng trong 90 ngày** từ 38 khách hàng (27 khách mua lại), đủ các trạng thái, có xu hướng tăng trưởng theo tháng.
+- Dữ liệu được sinh bằng bộ sinh số có **hạt giống cố định**: chạy lại trong cùng một ngày sẽ ra đúng cùng số liệu và mã đơn, khớp với báo cáo. Vì khoảng 90 ngày tính lùi từ hôm nay, chạy vào ngày khác thì ngày đặt và số liệu sẽ thay đổi theo.
+- **Toàn bộ khách hàng là hư cấu** (tên, số điện thoại, địa chỉ), chỉ dùng để minh họa.
+- Bảng thống kê: [docs/bao-cao-du-lieu-mua-hang.md](docs/bao-cao-du-lieu-mua-hang.md). Xuất danh sách đơn ra Excel: **Admin → Đơn hàng → Xuất CSV**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tài liệu
+
+- [docs/chatbot.md](docs/chatbot.md): dữ liệu chatbot hỗ trợ và cách mở rộng.
+- [docs/bao-cao-du-lieu-mua-hang.md](docs/bao-cao-du-lieu-mua-hang.md): thống kê dữ liệu mua hàng mẫu.
+
+## Nguồn tài nguyên
+
+- Ảnh sản phẩm mẫu: [Wikimedia Commons](https://commons.wikimedia.org), giấy phép tự do; ghi nguồn tác giả tại [prisma/seed-images/CREDITS.md](prisma/seed-images/CREDITS.md).
+- Font chữ [Be Vietnam Pro](https://github.com/bettergui/BeVietnamPro) (SIL Open Font License); biểu tượng [Lucide](https://lucide.dev) (ISC).
+- Mã QR thanh toán tạo bởi dịch vụ [VietQR](https://vietqr.io). Thông tin tài khoản ngân hàng trong dữ liệu mẫu chỉ để minh họa, cần thay bằng tài khoản thật trong **Cài đặt → Chuyển khoản** trước khi nhận thanh toán.
+
+---
+
+© 2026 **Trần Thị Thanh Hương** (MSSV 25210281) – Trường Đại học Công nghệ Thông tin, ĐHQG TP. Hồ Chí Minh. Mọi quyền được bảo lưu.
+Mã nguồn được thực hiện cho mục đích học tập trong khuôn khổ đồ án môn học.

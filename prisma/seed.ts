@@ -9,9 +9,9 @@ import bcrypt from "bcryptjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { slugify } from "../src/lib/slug";
-import { generateOrderCode } from "../src/lib/order-code";
 import { productDerivedFields } from "../src/lib/product-utils";
 import { CHAT_FAQS } from "./seed-data/chat-faqs";
+import { generateDemoOrders } from "./seed-data/demo-orders";
 import type { Settings } from "../src/lib/settings-schema";
 
 const prisma = new PrismaClient();
@@ -247,15 +247,6 @@ const POSTS = [
   },
 ];
 
-const SAMPLE_CUSTOMERS = [
-  { name: "Nguyễn Thị Lan", phone: "0901234567", address: "12 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh" },
-  { name: "Trần Minh Khoa", phone: "0912345678", address: "45 Lê Lợi, Phường 4, Gò Vấp, TP. Hồ Chí Minh" },
-  { name: "Lê Thu Hà", phone: "0987654321", address: "88 Trần Phú, Hải Châu, Đà Nẵng" },
-  { name: "Phạm Quốc Bảo", phone: "0356789012", address: "21 Hai Bà Trưng, Hoàn Kiếm, Hà Nội" },
-  { name: "Võ Ngọc Anh", phone: "0778899001", address: "102 Võ Văn Tần, Phường 6, Quận 3, TP. Hồ Chí Minh" },
-  { name: "Đặng Thảo Vy", phone: "0833445566", address: "5 Lý Thường Kiệt, TP. Huế" },
-];
-
 /* ------------------------------------------------------------------ */
 /* Main                                                                */
 /* ------------------------------------------------------------------ */
@@ -282,7 +273,7 @@ async function main() {
   const email = process.env.ADMIN_EMAIL || "admin@senda.local";
   const password = process.env.ADMIN_PASSWORD || "admin123";
   await prisma.adminUser.create({
-    data: { email, name: "Quản trị viên", passwordHash: await bcrypt.hash(password, 10) },
+    data: { email, name: process.env.ADMIN_NAME || "Trần Thị Thanh Hương", passwordHash: await bcrypt.hash(password, 10) },
   });
   console.log(`  ✓ Admin: ${email} / ${password}`);
 
@@ -293,11 +284,11 @@ async function main() {
       slogan: "Mang thiên nhiên xanh mát vào từng góc nhỏ",
       logo: "",
       phone: "0901 234 567",
-      email: "hello@sendaxinh.vn",
-      address: "123 Nguyễn Văn Linh, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh",
+      email: "25210281@ms.uit.edu.vn",
+      address: "Trường Đại học Công nghệ Thông tin (UIT) – ĐHQG TP. Hồ Chí Minh",
       workingHours: "8:00 – 21:00, Thứ 2 – Chủ nhật",
       mapEmbedUrl:
-        "https://www.google.com/maps?q=Nguy%E1%BB%85n+V%C4%83n+Linh,+Qu%E1%BA%ADn+7,+TP.+H%E1%BB%93+Ch%C3%AD+Minh&output=embed",
+        "https://www.google.com/maps?q=Tr%C6%B0%E1%BB%9Dng+%C4%90%E1%BA%A1i+h%E1%BB%8Dc+C%C3%B4ng+ngh%E1%BB%87+Th%C3%B4ng+tin+%C4%90HQG+TP.HCM&output=embed",
     },
     social: {
       facebook: "https://facebook.com/",
@@ -439,43 +430,9 @@ async function main() {
   });
   console.log(`  ✓ ${POSTS.length} bài viết + 1 bản nháp`);
 
-  // Đơn hàng mẫu cho dashboard
-  const statuses = ["NEW", "NEW", "NEW", "CONFIRMED", "CONFIRMED", "SHIPPING", "SHIPPING", "COMPLETED", "COMPLETED", "COMPLETED", "COMPLETED", "CANCELLED"];
-  const usedCodes = new Set<string>();
-  for (const [i, status] of statuses.entries()) {
-    const customer = SAMPLE_CUSTOMERS[i % SAMPLE_CUSTOMERS.length];
-    const picks = [created[(i * 3) % created.length], created[(i * 7 + 2) % created.length]];
-    const items = picks.map((p, idx) => ({
-      productId: p.id,
-      productName: p.name,
-      productImage: p.image,
-      price: p.salePrice ?? p.price,
-      quantity: idx === 0 ? 1 + (i % 3) : 1,
-    }));
-    const subtotal = items.reduce((s, it) => s + it.price * it.quantity, 0);
-    const shippingFee = subtotal >= settings.shipping.freeThreshold ? 0 : settings.shipping.fee;
-    const createdAt = new Date(now - (i * 1.7 + 0.2) * 24 * 60 * 60 * 1000);
-    let code = generateOrderCode(createdAt);
-    while (usedCodes.has(code)) code = generateOrderCode(createdAt);
-    usedCodes.add(code);
-    await prisma.order.create({
-      data: {
-        code,
-        customerName: customer.name,
-        phone: customer.phone,
-        address: customer.address,
-        note: i % 4 === 0 ? "Giao giờ hành chính giúp mình nhé" : null,
-        paymentMethod: i % 3 === 0 ? "BANK_TRANSFER" : "COD",
-        status,
-        subtotal,
-        shippingFee,
-        total: subtotal + shippingFee,
-        createdAt,
-        items: { create: items },
-      },
-    });
-  }
-  console.log(`  ✓ ${statuses.length} đơn hàng mẫu`);
+  // Đơn hàng mẫu (90 ngày) cho dashboard, báo cáo và video demo – xem prisma/seed-data/demo-orders.ts
+  const demo = await generateDemoOrders(prisma, { shippingFee: settings.shipping.fee, freeThreshold: settings.shipping.freeThreshold });
+  console.log(`  ✓ ${demo.orders} đơn hàng mẫu từ ${demo.customers} khách (${demo.repeatCustomers} khách mua lại)`);
 
   // Liên hệ mẫu
   await prisma.contact.createMany({

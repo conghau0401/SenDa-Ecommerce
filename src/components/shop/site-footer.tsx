@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { getSettings } from "@/lib/settings";
 import { getActiveCategories } from "@/lib/queries";
+import { PROJECT } from "@/lib/project";
 import { Logo } from "./logo";
 import { FacebookIcon, InstagramIcon, TiktokIcon, YoutubeIcon, ZaloIcon } from "../ui/social-icons";
 
@@ -102,9 +103,17 @@ export async function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="container-page flex flex-col items-center justify-between gap-2 py-5 text-xs text-leaf-100/70 sm:flex-row">
-          <p>© {new Date().getFullYear()} {store.name}. Mọi quyền được bảo lưu.</p>
-          <p>Thiết kế với 💚 cho những người yêu cây.</p>
+        <div className="container-page flex flex-col items-center justify-between gap-2 py-5 text-center text-xs text-leaf-100/70 sm:flex-row sm:text-left">
+          <p>
+            © {PROJECT.year} <span className="font-semibold text-leaf-100">{PROJECT.student}</span> (MSSV {PROJECT.studentId}). Mọi
+            quyền được bảo lưu.
+          </p>
+          <p>
+            {PROJECT.type} · {PROJECT.school} ·{" "}
+            <a href={`mailto:${PROJECT.email}`} className="hover:text-white hover:underline">
+              {PROJECT.email}
+            </a>
+          </p>
         </div>
       </div>
     </footer>

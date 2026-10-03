@@ -20,11 +20,6 @@ function vnStartOfDay(d: Date) {
   const vn = new Date(d.getTime() + VN_OFFSET);
   return new Date(Date.UTC(vn.getUTCFullYear(), vn.getUTCMonth(), vn.getUTCDate()) - VN_OFFSET);
 }
-function vnStartOfMonth(d: Date, offsetMonths = 0) {
-  const vn = new Date(d.getTime() + VN_OFFSET);
-  return new Date(Date.UTC(vn.getUTCFullYear(), vn.getUTCMonth() + offsetMonths, 1) - VN_OFFSET);
-}
-
 function StatTile({ label, value, hint, href }: { label: string; value: string; hint?: React.ReactNode; href?: string }) {
   const body = (
     <>
@@ -47,15 +42,16 @@ export default async function DashboardPage() {
   const now = new Date();
   const today = vnStartOfDay(now);
   const chartFrom = new Date(today.getTime() - 13 * DAY);
-  const monthStart = vnStartOfMonth(now);
-  const prevMonthStart = vnStartOfMonth(now, -1);
+  // Doanh thu cuốn chiếu 30 ngày (ổn định ở mọi thời điểm trong tháng, không bị "về 0" đầu tháng)
+  const last30 = new Date(today.getTime() - 29 * DAY);
+  const prev30 = new Date(last30.getTime() - 30 * DAY);
 
   const [revenueMonth, revenuePrev, statusGroups, todayOrders, processing, recentDaily, lowStock, recentOrders, openContacts] =
     await Promise.all([
-      prisma.order.aggregate({ _sum: { total: true }, where: { status: "COMPLETED", createdAt: { gte: monthStart } } }),
+      prisma.order.aggregate({ _sum: { total: true }, where: { status: "COMPLETED", createdAt: { gte: last30 } } }),
       prisma.order.aggregate({
         _sum: { total: true },
-        where: { status: "COMPLETED", createdAt: { gte: prevMonthStart, lt: monthStart } },
+        where: { status: "COMPLETED", createdAt: { gte: prev30, lt: last30 } },
       }),
       prisma.order.groupBy({ by: ["status"], _count: { _all: true } }),
       prisma.order.count({ where: { createdAt: { gte: today } } }),
@@ -111,14 +107,14 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatTile
-          label="Doanh thu tháng này"
+          label="Doanh thu 30 ngày qua"
           value={formatVND(monthRev)}
           hint={
             delta === null ? (
               "Tính trên đơn hoàn thành"
             ) : (
               <span className={delta >= 0 ? "font-medium text-leaf-700" : "font-medium text-red-700"}>
-                {delta >= 0 ? "▲" : "▼"} {Math.abs(delta)}% so với tháng trước
+                {delta >= 0 ? "▲" : "▼"} {Math.abs(delta)}% so với 30 ngày trước
               </span>
             )
           }

@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro } from "next/font/google";
 import { getSettings } from "@/lib/settings";
 import { SITE_URL } from "@/lib/site";
 import { NavigationProgress } from "@/components/navigation-progress";
+import { PROJECT } from "@/lib/project";
 import "./globals.css";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -20,6 +21,10 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: { default: `${store.name} – Sen đá & tiểu cảnh xinh xắn`, template: `%s | ${store.name}` },
     description,
+    applicationName: store.name,
+    authors: [{ name: `${PROJECT.student} (MSSV ${PROJECT.studentId})`, url: `mailto:${PROJECT.email}` }],
+    creator: PROJECT.student,
+    publisher: `${PROJECT.type} – ${PROJECT.schoolShort}`,
     openGraph: { type: "website", locale: "vi_VN", siteName: store.name, description },
   };
 }

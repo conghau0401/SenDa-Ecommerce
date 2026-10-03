@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "img.vietqr.io" }],
   },
+  // Ẩn icon "N" của Next.js ở góc dưới (chỉ hiện khi chạy dev)
+  devIndicators: false,
   // Chỉ ảnh hưởng `next dev`: giữ trang đã biên dịch lâu hơn (mặc định webpack bỏ sau 60 giây
   // không dùng và chỉ giữ 5 trang -> quay lại menu cũ phải biên dịch lại, warmup nhanh "nguội").
   onDemandEntries: {

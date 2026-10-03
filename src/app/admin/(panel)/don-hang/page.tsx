@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
-import { Search } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { formatDateTime, formatVND } from "@/lib/format";
 import { normalizePhone } from "@/lib/validators/common";
@@ -72,7 +72,19 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader title="Đơn hàng" description={`${total} đơn phù hợp`} />
+      <PageHeader
+        title="Đơn hàng"
+        description={`${total} đơn phù hợp`}
+        actions={
+          <a
+            href={href({ trang: "" }).replace("/admin/don-hang", "/admin/don-hang/export")}
+            download
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-leaf-700/30 bg-surface px-4 text-sm font-medium text-leaf-800 hover:border-leaf-700 hover:bg-leaf-50"
+          >
+            <Download className="size-4" aria-hidden /> Xuất CSV ({total} đơn)
+          </a>
+        }
+      />
 
       <nav className="mb-4 flex gap-1 overflow-x-auto border-b border-border" aria-label="Lọc theo trạng thái">
         {tabs.map((t) => (

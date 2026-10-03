@@ -2,6 +2,8 @@
   "name": "senda-website",
   "version": "0.1.0",
   "private": true,
+  "description": "Đồ án môn học: Website bán sen đá (Next.js, Prisma) – Trần Thị Thanh Hương, MSSV 25210281, UIT",
+  "author": "Trần Thị Thanh Hương <25210281@ms.uit.edu.vn>",
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:webpack": "next dev",
@@ -13,6 +15,7 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
+    "db:demo-orders": "tsx scripts/demo-orders.mts",
     "db:reset": "prisma migrate reset --force",
     "db:studio": "prisma studio",
     "setup": "prisma migrate deploy && prisma db seed",

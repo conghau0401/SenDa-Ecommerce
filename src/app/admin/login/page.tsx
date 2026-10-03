@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Leaf } from "lucide-react";
 import { getSettings } from "@/lib/settings";
 import { LoginForm } from "@/components/admin/login-form";
+import { PROJECT } from "@/lib/project";
 
 export const metadata: Metadata = { title: "Đăng nhập" };
 
@@ -22,6 +23,11 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="rounded-[1.5rem] bg-surface p-6 shadow-lift ring-1 ring-border/60 sm:p-8">
           <LoginForm next={next ?? "/admin"} />
         </div>
+        <p className="mt-6 text-center text-xs leading-relaxed text-muted">
+          {PROJECT.type} · {PROJECT.student} – MSSV {PROJECT.studentId}
+          <br />
+          {PROJECT.school}
+        </p>
       </div>
     </main>
   );
