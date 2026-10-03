@@ -90,5 +90,12 @@ export const useCart = create<CartState>()(
   ),
 );
 
-export const selectCount = (s: CartState) => s.items.reduce((n, i) => n + i.quantity, 0);
+// Đồng bộ giữa các tab: khi tab khác thay đổi giỏ, nạp lại để tab này không ghi đè bằng dữ liệu cũ
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (e) => {
+    if (e.key === "senda-cart") void useCart.persist.rehydrate();
+  });
+}
+
+export const selectCount =(s: CartState) => s.items.reduce((n, i) => n + i.quantity, 0);
 export const selectSubtotal = (s: CartState) => s.items.reduce((n, i) => n + i.price * i.quantity, 0);

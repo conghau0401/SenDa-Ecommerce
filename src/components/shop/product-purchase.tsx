@@ -36,7 +36,7 @@ export function ProductPurchase({ product, price, salePrice }: Props) {
 
   const flySource = () => document.querySelector<HTMLElement>("[data-fly-image]");
 
-  const handleAdd = () => addToCart(product, qty, flySource());
+  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => addToCart(product, qty, flySource(), e.currentTarget);
 
   const handleBuyNow = () => {
     addToCart(product, qty, null);

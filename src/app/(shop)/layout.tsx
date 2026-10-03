@@ -1,8 +1,11 @@
 import { Toaster } from "sonner";
+import { getSettings } from "@/lib/settings";
 import { SiteHeader } from "@/components/shop/site-header";
 import { SiteFooter } from "@/components/shop/site-footer";
+import { CartDrawer } from "@/components/cart/cart-drawer";
 
-export default function ShopLayout({ children }: { children: React.ReactNode }) {
+export default async function ShopLayout({ children }: { children: React.ReactNode }) {
+  const { shipping } = await getSettings();
   return (
     <>
       <SiteHeader />
@@ -10,6 +13,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
       <SiteFooter />
+      <CartDrawer shipping={shipping} />
       <Toaster
         position="top-center"
         richColors
