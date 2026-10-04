@@ -51,7 +51,7 @@ cp .env.example .env            # Windows (cmd): copy .env.example .env
 # 3. Tạo cơ sở dữ liệu
 npx prisma migrate deploy
 
-# 4. Nạp dữ liệu mẫu: 8 danh mục, 32 sản phẩm, 6 bài viết, 150 đơn hàng mẫu, 25 câu kiến thức chatbot
+# 4. Nạp dữ liệu mẫu: 8 danh mục, 32 sản phẩm, 6 bài viết, ~150 đơn hàng mẫu, 25 câu kiến thức chatbot
 npm run db:seed
 
 # 5. Chạy website
@@ -84,7 +84,7 @@ Khai báo trong `.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`). Có thể đổi mật
 
 ## Dữ liệu mẫu cho báo cáo
 
-- **150 đơn hàng trong 90 ngày** từ 38 khách hàng (27 khách mua lại), đủ các trạng thái, có xu hướng tăng trưởng theo tháng.
+- **Khoảng 150 đơn hàng trong 90 ngày** từ gần 40 khách hàng (đa số mua lại nhiều lần), đủ các trạng thái, có xu hướng tăng trưởng theo tháng.
 - Dữ liệu được sinh bằng bộ sinh số có **hạt giống cố định**: chạy lại trong cùng một ngày sẽ ra đúng cùng số liệu và mã đơn, khớp với báo cáo. Vì khoảng 90 ngày tính lùi từ hôm nay, chạy vào ngày khác thì ngày đặt và số liệu sẽ thay đổi theo.
 - **Toàn bộ khách hàng là hư cấu** (tên, số điện thoại, địa chỉ), chỉ dùng để minh họa.
 - Bảng thống kê: [docs/bao-cao-du-lieu-mua-hang.md](docs/bao-cao-du-lieu-mua-hang.md). Xuất danh sách đơn ra Excel: **Admin → Đơn hàng → Xuất CSV**.

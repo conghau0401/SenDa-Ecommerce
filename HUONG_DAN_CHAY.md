@@ -74,7 +74,7 @@ Lệnh này tạo file `prisma/dev.db` và toàn bộ bảng dữ liệu.
 npm run db:seed
 ```
 
-Kết quả gồm 8 danh mục, 32 sản phẩm có ảnh, 6 bài viết, **150 đơn hàng mẫu trong 90 ngày**, 25 câu kiến thức chatbot và tài khoản quản trị. Mỗi lần chạy lại lệnh này, toàn bộ dữ liệu sẽ được **xóa và tạo lại từ đầu**.
+Kết quả gồm 8 danh mục, 32 sản phẩm có ảnh, 6 bài viết, **khoảng 150 đơn hàng mẫu trong 90 ngày gần nhất**, 25 câu kiến thức chatbot và tài khoản quản trị. Đơn hàng được tính lùi từ ngày chạy lệnh, nên số đơn chính xác thay đổi nhẹ theo ngày. Mỗi lần chạy lại lệnh này, toàn bộ dữ liệu sẽ được **xóa và tạo lại từ đầu**.
 
 ## Bước 6. Chạy website
 
@@ -135,7 +135,7 @@ Sau đó mở http://localhost:3000. Mỗi lần sửa mã nguồn cần chạy 
 
 | Lệnh | Tác dụng |
 |---|---|
-| `npm run db:demo-orders` | Chỉ tạo lại 150 đơn hàng mẫu (giữ sản phẩm, cài đặt) và xuất thống kê ra `docs/bao-cao-du-lieu-mua-hang.md` |
+| `npm run db:demo-orders` | Chỉ tạo lại đơn hàng mẫu (giữ sản phẩm, cài đặt) và xuất thống kê ra `docs/bao-cao-du-lieu-mua-hang.md` |
 | `npm run db:studio` | Mở giao diện xem/sửa cơ sở dữ liệu tại http://localhost:5555 |
 | `npm run warmup` | Mở trước các trang khi website đang chạy bằng `npm run dev` |
 | `npm run chatbot:test` | Kiểm thử chatbot với 46 câu hỏi mẫu |
