@@ -270,8 +270,8 @@ async function main() {
   await prisma.adminUser.deleteMany();
 
   // Admin
-  const email = process.env.ADMIN_EMAIL || "admin@senda.local";
-  const password = process.env.ADMIN_PASSWORD || "admin123";
+  const email = process.env.ADMIN_EMAIL || "25210281@ms.uit.edu.vn";
+  const password = process.env.ADMIN_PASSWORD || "25210281";
   await prisma.adminUser.create({
     data: { email, name: process.env.ADMIN_NAME || "Trần Thị Thanh Hương", passwordHash: await bcrypt.hash(password, 10) },
   });

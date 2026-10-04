@@ -64,7 +64,7 @@ Mở **http://localhost:3000**. Trang quản trị: **http://localhost:3000/admi
 
 | Email | Mật khẩu |
 |---|---|
-| `admin@senda.local` | `admin123` |
+| `25210281@ms.uit.edu.vn` | `25210281` |
 
 Khai báo trong `.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`). Có thể đổi mật khẩu tại **Cài đặt → Tài khoản**.
 

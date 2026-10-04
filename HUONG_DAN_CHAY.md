@@ -93,7 +93,7 @@ npm run dev:warm
 
 | Email | Mật khẩu |
 |---|---|
-| `admin@senda.local` | `admin123` |
+| `25210281@ms.uit.edu.vn` | `25210281` |
 
 Dừng chương trình: nhấn **Ctrl + C** trong Terminal.
 
@@ -165,7 +165,7 @@ Chi tiết: [docs/chatbot.md](docs/chatbot.md).
 | Website báo lỗi bảng không tồn tại (`The table ... does not exist`) | Chưa làm **Bước 4** và **Bước 5** |
 | Trang không có sản phẩm, ảnh không hiển thị | Chạy lại `npm run db:seed` (bước này chép ảnh mẫu vào `public/uploads/seed`) |
 | `EPERM: operation not permitted ... query_engine` (Windows) | Website đang chạy khóa file của Prisma: nhấn Ctrl + C để dừng, chạy lại lệnh, rồi mở lại website |
-| Đăng nhập admin báo sai mật khẩu | Mật khẩu có thể đã bị đổi trong Cài đặt: chạy `npm run db:seed` để đặt lại `admin123` (lệnh này tạo lại toàn bộ dữ liệu mẫu) |
+| Đăng nhập admin báo sai mật khẩu | Mật khẩu có thể đã bị đổi trong Cài đặt: chạy `npm run db:seed` để đặt lại mật khẩu `25210281` (lệnh này tạo lại toàn bộ dữ liệu mẫu) |
 | `npm run dev` báo lỗi Turbopack | Dùng `npm run dev:webpack` |
 | Mã QR chuyển khoản không hiện | Mã QR lấy từ dịch vụ VietQR nên máy cần có kết nối Internet |
 
