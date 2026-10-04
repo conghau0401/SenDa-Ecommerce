@@ -4,6 +4,13 @@
   "private": true,
   "description": "Đồ án môn học: Website bán sen đá (Next.js, Prisma) – Trần Thị Thanh Hương, MSSV 25210281, UIT",
   "author": "Trần Thị Thanh Hương <25210281@ms.uit.edu.vn>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/conghau0401/SenDa-Ecommerce.git"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:webpack": "next dev",

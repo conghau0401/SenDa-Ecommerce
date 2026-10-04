@@ -39,7 +39,7 @@ Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Prisma ORM + SQLite 
 
 ## Cài đặt & chạy
 
-Yêu cầu: **Node.js 20 trở lên**.
+Yêu cầu: **Node.js 20.9 trở lên** (khuyên dùng 22 LTS). Hướng dẫn chi tiết từng bước và cách xử lý lỗi: **[HUONG_DAN_CHAY.md](HUONG_DAN_CHAY.md)**.
 
 ```bash
 # 1. Cài thư viện
@@ -91,6 +91,7 @@ Khai báo trong `.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`). Có thể đổi mật
 
 ## Tài liệu
 
+- [HUONG_DAN_CHAY.md](HUONG_DAN_CHAY.md): hướng dẫn chạy chương trình từng bước, xử lý lỗi thường gặp.
 - [docs/chatbot.md](docs/chatbot.md): dữ liệu chatbot hỗ trợ và cách mở rộng.
 - [docs/bao-cao-du-lieu-mua-hang.md](docs/bao-cao-du-lieu-mua-hang.md): thống kê dữ liệu mua hàng mẫu.
 
